@@ -1,6 +1,20 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import '@aws-amplify/ui-react/styles.css';
+
+import { AmplifyProvider } from '@aws-amplify/ui-react';
+import { ChakraProvider } from '@chakra-ui/react';
+import { Amplify } from 'aws-amplify';
+
+import awsconfig from '../aws-exports';
+
+import type { AppProps } from "next/app";
+Amplify.configure({ ...awsconfig, ssr: true });
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <AmplifyProvider>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </AmplifyProvider>
+  );
 }
