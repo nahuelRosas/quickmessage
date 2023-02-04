@@ -137,7 +137,7 @@ const useRecoveryData = () => {
     );
     if (subscription instanceof Observable) {
       const response = subscription.subscribe({
-        next: (res) => {
+        next: (res: any) => {
           getMessages().then((messages) => {
             setStateMessages(messages as any[]);
           });
@@ -145,7 +145,7 @@ const useRecoveryData = () => {
         error: (error: any) => {
           console.warn(error);
         },
-      })
+      });
       return () => {
         if (!response.closed) {
           response.unsubscribe();

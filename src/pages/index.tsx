@@ -1,10 +1,18 @@
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import { Box, Container, Flex, FormControl, Heading, IconButton, Input } from '@chakra-ui/react';
-import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
-import { FaRegArrowAltCircleRight, FaRegTimesCircle } from 'react-icons/fa';
+import { withAuthenticator } from "@aws-amplify/ui-react";
+import {
+  Box,
+  Container,
+  Flex,
+  FormControl,
+  Heading,
+  IconButton,
+  Input,
+} from "@chakra-ui/react";
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
+import { FaRegArrowAltCircleRight, FaRegTimesCircle } from "react-icons/fa";
 
-import useRecoveryData from '../hooks/useRecoveryData';
+import useRecoveryData from "../hooks/useRecoveryData";
 
 const Home = () => {
   const {
@@ -73,37 +81,41 @@ const Home = () => {
               id="chat"
               maxHeight={"60vh"}
               overflowY="scroll">
-              {stateMessages?.map((message) => {
-                return (
-                  <Box
-                    m={4}
-                    key={message.id}
-                    py={4}
-                    px={8}
-                    bg={isMe(message.owner) ? "teal.100" : "gray.300"}
-                    borderRadius="md"
-                    alignSelf={isMe(message.owner) ? "flex-end" : "flex-start"}>
-                    <Heading
-                      as="h3"
-                      fontSize="md"
-                      color="gray.700"
-                      fontWeight="extrabold"
-                      letterSpacing="tight"
-                      lineHeight="shorter">
-                      {message.message}
-                    </Heading>
-                    <Heading
-                      as="h4"
-                      fontSize="md"
-                      color="gray.500"
-                      fontWeight="extrabold"
-                      letterSpacing="tight"
-                      lineHeight="shorter">
-                      {message.owner}
-                    </Heading>
-                  </Box>
-                );
-              })}
+              {stateMessages?.map(
+                (message: { id: any; owner: string; message: any }) => {
+                  return (
+                    <Box
+                      m={4}
+                      key={message.id}
+                      py={4}
+                      px={8}
+                      bg={isMe(message.owner) ? "teal.100" : "gray.300"}
+                      borderRadius="md"
+                      alignSelf={
+                        isMe(message.owner) ? "flex-end" : "flex-start"
+                      }>
+                      <Heading
+                        as="h3"
+                        fontSize="md"
+                        color="gray.700"
+                        fontWeight="extrabold"
+                        letterSpacing="tight"
+                        lineHeight="shorter">
+                        {message.message}
+                      </Heading>
+                      <Heading
+                        as="h4"
+                        fontSize="md"
+                        color="gray.500"
+                        fontWeight="extrabold"
+                        letterSpacing="tight"
+                        lineHeight="shorter">
+                        {message.owner}
+                      </Heading>
+                    </Box>
+                  );
+                }
+              )}
             </Flex>
             <FormControl
               flex="1"
@@ -119,7 +131,9 @@ const Home = () => {
                 type="text"
                 placeholder="Enter your message"
                 value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
+                onChange={(e: { target: { value: any } }) =>
+                  setMessageText(e.target.value)
+                }
                 size="lg"
                 fontWeight="normal"
                 letterSpacing="wide"
@@ -178,59 +192,3 @@ const Home = () => {
 };
 
 export default withAuthenticator(Home);
-
-{
-  /* <Input
-                type="text"
-                placeholder="Enter your message"
-                value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
-                size="lg"
-                fontWeight="normal"
-                letterSpacing="wide"
-                alignSelf={"center"}
-                fontSize="lg"
-                lineHeight="shorter"
-                px={8}
-                h={14}
-                color="white"
-                borderRadius="md"
-                boxShadow="md"
-              />
-              <Button
-                type="submit"
-                colorScheme="teal"
-                variant="solid"
-                mt={4}
-                loadingText="Sending"
-                spinnerPlacement="end"
-                size="lg"
-                fontWeight="extrabold"
-                letterSpacing="wide"
-                alignSelf={"center"}
-                fontSize="lg"
-                lineHeight="shorter"
-                px={8}
-                h={14}
-                borderRadius="md"
-                boxShadow="md"
-                _hover={{
-                  boxShadow: "lg",
-                }}
-                _active={{
-                  boxShadow: "xl",
-                }}
-                _focus={{
-                  boxShadow: "xl",
-                }}
-                isLoading={loadingSendMessage}
-                onClick={() => {
-                  sendMessage({
-                    owner: user,
-                    messageText,
-                  });
-                  setMessageText("");
-                }}>
-                Send
-              </Button> */
-}
