@@ -7,8 +7,9 @@
     "config": {
       "SourceDir": ".",
       "DistributionDir": "build",
-      "BuildCommand": "yarn run build",
-      "StartCommand": "yarn run start"
+      "BuildCommand": "npm run build",
+      "StartCommand": "npm run start",
+      "ServerlessContainers": false
     }
   },
   "providers": [
