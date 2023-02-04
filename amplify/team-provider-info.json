@@ -1,15 +1,15 @@
 {
-  "dev": {
+  "sampledev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-quickmessage-dev-50437-authRole",
-      "UnauthRoleArn": "arn:aws:iam::207529145981:role/amplify-quickmessage-dev-50437-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::207529145981:role/amplify-quickmessage-dev-50437-authRole",
+      "AuthRoleName": "amplify-quickmessage-sampledev-21903-authRole",
+      "UnauthRoleArn": "arn:aws:iam::207529145981:role/amplify-quickmessage-sampledev-21903-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::207529145981:role/amplify-quickmessage-sampledev-21903-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-quickmessage-dev-50437-deployment",
-      "UnauthRoleName": "amplify-quickmessage-dev-50437-unauthRole",
-      "StackName": "amplify-quickmessage-dev-50437",
-      "StackId": "arn:aws:cloudformation:us-east-1:207529145981:stack/amplify-quickmessage-dev-50437/68f53ea0-a399-11ed-b31b-0ec16b2d259d",
-      "AmplifyAppId": "d3nxbcib7uprut"
+      "DeploymentBucketName": "amplify-quickmessage-sampledev-21903-deployment",
+      "UnauthRoleName": "amplify-quickmessage-sampledev-21903-unauthRole",
+      "StackName": "amplify-quickmessage-sampledev-21903",
+      "StackId": "arn:aws:cloudformation:us-east-1:207529145981:stack/amplify-quickmessage-sampledev-21903/720954b0-a44b-11ed-a052-0a3fd21d4b57",
+      "AmplifyAppId": "d3q15yvk0zr0z0"
     },
     "categories": {
       "auth": {
@@ -17,6 +17,12 @@
       },
       "api": {
         "quickmessage": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d3q15yvk0zr0z0",
+          "type": "cicd"
+        }
       }
     }
   }
