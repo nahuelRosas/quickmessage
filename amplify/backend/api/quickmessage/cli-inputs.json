@@ -4,19 +4,13 @@
     "apiName": "quickmessage",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "API_KEY",
-      "expirationTime": 7
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authquickmessageb7044e9e"
     },
     "conflictResolution": {
       "defaultResolutionStrategy": {
         "type": "AUTOMERGE"
       }
-    },
-    "additionalAuthTypes": [
-      {
-        "mode": "AMAZON_COGNITO_USER_POOLS",
-        "cognitoUserPoolId": "authquickmessagee3489784"
-      }
-    ]
+    }
   }
 }

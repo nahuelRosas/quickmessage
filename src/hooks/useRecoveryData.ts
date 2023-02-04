@@ -1,13 +1,36 @@
+import * as subscriptions from "@/graphql/subscriptions";
 import { GraphQLResult } from "@aws-amplify/api-graphql";
 import { useToast } from "@chakra-ui/react";
 import { CognitoUser } from "amazon-cognito-identity-js";
-import { API, Auth } from "aws-amplify";
-import { useCallback, useState } from "react";
+import { API, Auth, graphqlOperation } from "aws-amplify";
+import { useCallback, useEffect, useState } from "react";
+import { Observable } from "zen-observable-ts";
 
 import { createMessage } from "../graphql/mutations";
 import { listMessages } from "../graphql/queries";
 
 const useRecoveryData = () => {
+  const getMessages = async () => {
+    try {
+      const messages: GraphQLResult<any> = await API.graphql({
+        query: listMessages,
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+      const _messages: any[] = await orderByDate({
+        messages: messages.data.listMessages.items,
+      });
+      return _messages;
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Error to get messages",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
+
   const toast = useToast();
   const [userState, setUserState] = useState<{
     user: CognitoUser | undefined;
@@ -17,8 +40,8 @@ const useRecoveryData = () => {
     state: false,
   });
   const [loadingSendMessage, setLoadingSendMessage] = useState(false);
-
-  const orderByDate = ({
+  const [stateMessages, setStateMessages] = useState<any[]>([]);
+  const orderByDate = async ({
     messages,
   }: {
     messages: {
@@ -35,27 +58,12 @@ const useRecoveryData = () => {
     });
   };
 
-  const getMessages = async () => {
-    try {
-      const messages: GraphQLResult<any> = await API.graphql({
-        query: listMessages,
-        authMode: "AMAZON_COGNITO_USER_POOLS",
-      });
-      const _messages: any[] = orderByDate({
-        messages: messages.data.listMessages.items,
-      });
-
-      return _messages;
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Error while fetching messages",
-        status: "error",
-        duration: 9000,
-        isClosable: true,
-      });
-    }
-  };
+  useEffect(() => {
+    getMessages().then((messages) => {
+      setStateMessages(messages as any[]);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getCurrentAuthenticatedUser = async () => {
     if (userState && userState.state) {
@@ -67,7 +75,7 @@ const useRecoveryData = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Error while fetching user",
+        description: "Error to get user",
         status: "error",
         duration: 9000,
         isClosable: true,
@@ -98,10 +106,9 @@ const useRecoveryData = () => {
         authMode: "AMAZON_COGNITO_USER_POOLS",
       });
     } catch (error) {
-      const _error = error as Error;
       toast({
         title: "Error",
-        description: _error.message,
+        description: "Error to send message",
         status: "error",
         duration: 9000,
         isClosable: true,
@@ -115,19 +122,52 @@ const useRecoveryData = () => {
     return userState?.user?.getUsername();
   };
 
-  const isMe = ({ owner }: { owner: string }) => {
+  const isMe = (owner: string) => {
     return owner === getUserName();
   };
 
   const RootState = () => {
     getCurrentAuthenticatedUser();
+    subscribeToNewMessages();
   };
+
+  const subscribeToNewMessages = useCallback(async () => {
+    const subscription = await API.graphql(
+      graphqlOperation(subscriptions.onCreateMessage)
+    );
+    if (subscription instanceof Observable) {
+      const response = subscription.subscribe({
+        next: (res) => {
+          getMessages().then((messages) => {
+            setStateMessages(messages as any[]);
+          });
+        },
+        error: (error: any) => {
+          console.warn(error);
+        },
+      })
+      return () => {
+        if (!response.closed) {
+          response.unsubscribe();
+        }
+      };
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getMessagesState = () => {
+    return stateMessages;
+  };
+
   return {
     getMessages,
     RootState,
     getCurrentAuthenticatedUser,
     AuthState: userState?.user,
     getUserName,
+    stateMessages,
+    getMessagesState,
     isMe,
     handleSubmit: {
       sendMessage,

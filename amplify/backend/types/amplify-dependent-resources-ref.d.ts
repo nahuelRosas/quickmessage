@@ -2,12 +2,11 @@ export type AmplifyDependentResourcesAttributes = {
   "api": {
     "quickmessage": {
       "GraphQLAPIEndpointOutput": "string",
-      "GraphQLAPIIdOutput": "string",
-      "GraphQLAPIKeyOutput": "string"
+      "GraphQLAPIIdOutput": "string"
     }
   },
   "auth": {
-    "quickmessagee3489784": {
+    "quickmessageb7044e9e": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",

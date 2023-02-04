@@ -1,44 +1,34 @@
-import { withAuthenticator } from "@aws-amplify/ui-react";
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  FormControl,
-  Heading,
-  Input,
-} from "@chakra-ui/react";
-import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Box, Container, Flex, FormControl, Heading, IconButton, Input } from '@chakra-ui/react';
+import Head from 'next/head';
+import React, { useEffect, useState } from 'react';
+import { FaRegArrowAltCircleRight, FaRegTimesCircle } from 'react-icons/fa';
 
-import useRecoveryData from "../hooks/useRecoveryData";
+import useRecoveryData from '../hooks/useRecoveryData';
 
 const Home = () => {
-  const { getMessages, handleSubmit, getUserName, RootState, isMe } =
-    useRecoveryData();
+  const {
+    handleSubmit,
+    getUserName,
+    RootState,
+    isMe,
+    getMessagesState,
+    stateMessages,
+  } = useRecoveryData();
   RootState();
-
-  const [stateMessages, setStateMessages] = useState<any[] | undefined>();
-
   const user = getUserName();
-
-  useEffect(() => {
-    const getMessagesData = async () => {
-      const messages = await getMessages();
-      setStateMessages(messages);
-    };
-    getMessagesData();
-  }, [getMessages]);
 
   const [messageText, setMessageText] = useState("");
   const { loadingSendMessage, sendMessage } = handleSubmit;
-  const scrollToBottom = () => {
-    const element = document.getElementById("chat");
-    element?.scrollTo(0, element.scrollHeight);
+
+  const goToDown = () => {
+    const chat = document.getElementById("chat");
+    chat?.scrollTo(0, chat.scrollHeight);
   };
+
   useEffect(() => {
-    scrollToBottom();
-  }, [stateMessages]);
+    goToDown();
+  }, [getMessagesState]);
 
   return (
     <>
@@ -52,15 +42,18 @@ const Home = () => {
       <Container
         maxW="container.xl"
         h="100vh"
+        maxH={"100vh"}
+        overflowY="hidden"
         display="flex"
         alignItems="center"
         bg="gray.700"
         justifyContent="center">
-        <Flex direction="column">
+        <Flex direction="column" w="100%" gap={4} bg="gray.900">
           <Heading
             as="h1"
             fontSize="6xl"
             color="white"
+            alignSelf={"center"}
             fontWeight="extrabold"
             letterSpacing="tight"
             lineHeight="shorter">
@@ -71,56 +64,56 @@ const Home = () => {
             direction="column"
             w="100%"
             h="100%"
-            bg="white"
             p={8}
+            mt={4}
             borderRadius="md"
             boxShadow="md">
-            <Box
-              flex="1"
-              overflowY="auto"
-              alignItems={"center"}
-              justifyContent={"center"}
-              display={"flex"}
-              maxHeight="60vh"
+            <Flex
+              flexDirection={"column"}
               id="chat"
-              flexDirection={"column"}>
-              {stateMessages?.map((message) => (
-                <Box
-                  key={message.id}
-                  w="100%"
-                  p={4}
-                  bg={isMe(message.owner) ? "teal.100" : "gray.300"}
-                  borderRadius="md"
-                  mt={4}>
-                  <Heading
-                    as="h3"
-                    fontSize="md"
-                    color="gray.700"
-                    fontWeight="extrabold"
-                    letterSpacing="tight"
-                    lineHeight="shorter">
-                    {message.message}
-                  </Heading>
-                  <Heading
-                    as="h4"
-                    fontSize="md"
-                    color="gray.500"
-                    fontWeight="extrabold"
-                    letterSpacing="tight"
-                    lineHeight="shorter">
-                    {message.owner}
-                  </Heading>
-                </Box>
-              ))}
-            </Box>
+              maxHeight={"60vh"}
+              overflowY="scroll">
+              {stateMessages?.map((message) => {
+                return (
+                  <Box
+                    m={4}
+                    key={message.id}
+                    py={4}
+                    px={8}
+                    bg={isMe(message.owner) ? "teal.100" : "gray.300"}
+                    borderRadius="md"
+                    alignSelf={isMe(message.owner) ? "flex-end" : "flex-start"}>
+                    <Heading
+                      as="h3"
+                      fontSize="md"
+                      color="gray.700"
+                      fontWeight="extrabold"
+                      letterSpacing="tight"
+                      lineHeight="shorter">
+                      {message.message}
+                    </Heading>
+                    <Heading
+                      as="h4"
+                      fontSize="md"
+                      color="gray.500"
+                      fontWeight="extrabold"
+                      letterSpacing="tight"
+                      lineHeight="shorter">
+                      {message.owner}
+                    </Heading>
+                  </Box>
+                );
+              })}
+            </Flex>
             <FormControl
               flex="1"
               overflowY="auto"
               alignItems={"center"}
               justifyContent={"center"}
               display={"flex"}
-              flexDirection={"column"}
+              flexDirection={"row"}
               mt={4}
+              gap={4}
               w="100%">
               <Input
                 type="text"
@@ -135,6 +128,72 @@ const Home = () => {
                 lineHeight="shorter"
                 px={8}
                 h={14}
+                color="white"
+                borderRadius="md"
+                boxShadow="md"
+              />
+              <IconButton
+                disabled={messageText.length === 0}
+                icon={
+                  messageText.length > 0 ? (
+                    <FaRegArrowAltCircleRight />
+                  ) : (
+                    <FaRegTimesCircle />
+                  )
+                }
+                color={messageText.length > 0 ? "teal.500" : "red.500"}
+                type="submit"
+                bg={messageText.length > 0 ? "teal.100" : "red.100"}
+                aria-label="Send message"
+                fontWeight="extrabold"
+                letterSpacing="wide"
+                alignSelf={"center"}
+                fontSize="4xl"
+                lineHeight="shorter"
+                px={8}
+                h={14}
+                _hover={{
+                  bg: messageText.length > 0 ? "teal.200" : "red.200",
+                }}
+                _active={{
+                  bg: messageText.length > 0 ? "teal.300" : "red.300",
+                }}
+                borderRadius="md"
+                boxShadow="md"
+                onClick={() => {
+                  messageText.length > 0 &&
+                    sendMessage({
+                      owner: user,
+                      messageText,
+                    });
+                  setMessageText("");
+                }}
+                isLoading={loadingSendMessage}></IconButton>
+            </FormControl>
+          </Flex>
+        </Flex>
+      </Container>
+    </>
+  );
+};
+
+export default withAuthenticator(Home);
+
+{
+  /* <Input
+                type="text"
+                placeholder="Enter your message"
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                size="lg"
+                fontWeight="normal"
+                letterSpacing="wide"
+                alignSelf={"center"}
+                fontSize="lg"
+                lineHeight="shorter"
+                px={8}
+                h={14}
+                color="white"
                 borderRadius="md"
                 boxShadow="md"
               />
@@ -173,13 +232,5 @@ const Home = () => {
                   setMessageText("");
                 }}>
                 Send
-              </Button>
-            </FormControl>
-          </Flex>
-        </Flex>
-      </Container>
-    </>
-  );
-};
-
-export default withAuthenticator(Home);
+              </Button> */
+}

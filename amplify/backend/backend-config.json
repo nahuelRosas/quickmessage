@@ -7,24 +7,17 @@
             "UserPoolId"
           ],
           "category": "auth",
-          "resourceName": "quickmessagee3489784"
+          "resourceName": "quickmessageb7044e9e"
         }
       ],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authquickmessagee3489784"
-              }
-            }
-          ],
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
-            },
-            "authenticationType": "API_KEY"
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authquickmessageb7044e9e"
+            }
           }
         }
       },
@@ -33,7 +26,7 @@
     }
   },
   "auth": {
-    "quickmessagee3489784": {
+    "quickmessageb7044e9e": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
