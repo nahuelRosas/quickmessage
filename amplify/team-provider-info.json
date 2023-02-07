@@ -25,5 +25,32 @@
         }
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-quickmessage-dev-182317-authRole",
+      "UnauthRoleArn": "arn:aws:iam::207529145981:role/amplify-quickmessage-dev-182317-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::207529145981:role/amplify-quickmessage-dev-182317-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-quickmessage-dev-182317-deployment",
+      "UnauthRoleName": "amplify-quickmessage-dev-182317-unauthRole",
+      "StackName": "amplify-quickmessage-dev-182317",
+      "StackId": "arn:aws:cloudformation:us-east-1:207529145981:stack/amplify-quickmessage-dev-182317/a53c1ae0-a72d-11ed-ad35-0e52f1ce953b",
+      "AmplifyAppId": "d1xs07irxm4p6e"
+    },
+    "categories": {
+      "auth": {
+        "quickmessageb7044e9e": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d1xs07irxm4p6e",
+          "type": "cicd"
+        }
+      },
+      "api": {
+        "quickmessage": {}
+      }
+    }
   }
 }
