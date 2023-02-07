@@ -10,6 +10,17 @@ import { createMessage } from "../graphql/mutations";
 import { listMessages } from "../graphql/queries";
 
 const useRecoveryData = () => {
+  const toast = useToast();
+  const [userState, setUserState] = useState<{
+    user: CognitoUser | undefined;
+    state: boolean;
+  }>({
+    user: undefined,
+    state: false,
+  });
+  const [loadingSendMessage, setLoadingSendMessage] = useState(false);
+  const [stateMessages, setStateMessages] = useState<any[]>([]);
+
   const getMessages = async () => {
     try {
       const messages: GraphQLResult<any> = await API.graphql({
@@ -31,16 +42,6 @@ const useRecoveryData = () => {
     }
   };
 
-  const toast = useToast();
-  const [userState, setUserState] = useState<{
-    user: CognitoUser | undefined;
-    state: boolean;
-  }>({
-    user: undefined,
-    state: false,
-  });
-  const [loadingSendMessage, setLoadingSendMessage] = useState(false);
-  const [stateMessages, setStateMessages] = useState<any[]>([]);
   const orderByDate = async ({
     messages,
   }: {
@@ -57,13 +58,6 @@ const useRecoveryData = () => {
       return dateA.getTime() - dateB.getTime();
     });
   };
-
-  useEffect(() => {
-    getMessages().then((messages) => {
-      setStateMessages(messages as any[]);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const getCurrentAuthenticatedUser = async () => {
     if (userState && userState.state) {
@@ -131,7 +125,7 @@ const useRecoveryData = () => {
     subscribeToNewMessages();
   };
 
-  const subscribeToNewMessages = useCallback(async () => {
+  const subscribeToNewMessages = async () => {
     const subscription = await API.graphql(
       graphqlOperation(subscriptions.onCreateMessage)
     );
@@ -152,13 +146,18 @@ const useRecoveryData = () => {
         }
       };
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  };
 
   const getMessagesState = () => {
     return stateMessages;
   };
+
+  useEffect(() => {
+    getMessages().then((messages) => {
+      setStateMessages(messages as any[]);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return {
     getMessages,
